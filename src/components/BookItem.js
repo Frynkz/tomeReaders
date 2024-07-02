@@ -1,27 +1,27 @@
-/* eslint-disable array-callback-return */
-import React from "react";
-import { useState } from "react";
+
+import {React , useState} from 'react';
 import BookInfoModal from "../components/BookInfo";
+import { Fragment } from 'react';
 
-import { Button, Card } from "react-bootstrap/";
+import {Card } from "react-bootstrap/";
 
 
-const BookItem = ({ book }) => {
+const BookItemList = ({ books }) => {
   
-  const [modalShow, setModalShow] = React.useState(false);
-  const [bookItem, setItem] = React.useState();
-  console.log(book);
+  const [modalShow, setModalShow] = useState(false);
+   const [bookItem, setItem] = useState();
+  
 
   return (
     <>
-      {book.map((item) => {
+      {books.map((item, index) => { 
         
         let thumbnail =
           item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail;
-        let amount = item.saleInfo.listPrice && item.saleInfo.listPrice.amount;
-        if (thumbnail !== undefined && amount !== undefined) {
+        
+        if (thumbnail !== undefined) {
           return (
-            <>
+            <Fragment key={index}>
               <Card
                 className="h-100"
                 style={{background: "#D4B996FF",
@@ -29,7 +29,10 @@ const BookItem = ({ book }) => {
                     marginBottom:"10px"
                     
                 }}
-                onClick={()=> setModalShow(true)}
+                onClick={()=> {
+                  setModalShow(true)
+                  setItem(item)
+                }}
               >
                 <Card.Img
                   variant="top"
@@ -43,15 +46,16 @@ const BookItem = ({ book }) => {
                 {/* <Button variant="primary" onClick={()=> setModalShow(true)} >More</Button> */}
               </Card>
               <BookInfoModal
-              item={bookItem}
+               item={bookItem}
                show={modalShow}
                onHide={() => setModalShow(false)}
               />
-            </>
+              </Fragment>
           );
         }
+        return null;
       })}
     </>
   );
 };
-export default BookItem;
+export default BookItemList;
